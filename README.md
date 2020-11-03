@@ -1,1 +1,2 @@
-python stuff for controlling a signal generator I bought on Amaizon 
+python stuff for controlling a signal generator I bought on Amazon. It's cheap, but you get a lot for what you're paying for.
+<a href = "https://www.amazon.com/Koolertron-Precision-Generator-Dual-Channel-Arbitrary/dp/B07596133Q?pd_rd_w=CwuQF&pf_rd_p=a92e0124-cfa8-4f1e-82b5-a4a348d97008&pf_rd_r=X7HQYDY3HC2BVXAW58XD&pd_rd_r=e2ffacd9-aceb-4638-9078-e2af31f7819a&pd_rd_wg=28PPj&pd_rd_i=B07596133Q&ref_=pd_bap_d_rp_1_2_t">check it out</a>
