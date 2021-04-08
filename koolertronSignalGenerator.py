@@ -21,13 +21,13 @@ class KoolertronState(object):
         self._dutycycle = dutycycle
         
 
-# class for controlling the signal strong
+# base class for the koolertron
 class KoolertronSig(object):
     
     def __init__(self,ttydev):
         #self.ttydevice = '/dev/ttyUSB0'
         self.ttydevice = ttydev
-        self.baudRate = 115200
+        self.baudRate = 115200 # baud rate dosn't change 
         self.endl = b'\r\n'
         # calles for the states of the channelas
         self.chan1State = KoolertronState()
@@ -40,6 +40,7 @@ class KoolertronSig(object):
         if(type(state) == '__main__.KoolertronState'):
             pass
     
+    # method for sending a command to the ktron
     def sendCommand(self,strcmd):
         cmd = str.encode(strcmd)
         result = None
@@ -55,6 +56,7 @@ class KoolertronSig(object):
             
         return result
     
+    # may've been superseeded by set offset method
     # set the voltage level
     def setVoltageLevel(self,vlevel):
         pass
@@ -113,7 +115,7 @@ class KoolertronSig(object):
            
     # make the truth wave
     # for testing digital stuff
-    # 
+    # basicly make the ktron into a 2 bit counter, assuing 3.3 volts ttl
     def makeTruthWave(self,lspPer,amp=3.3):
         # figure out the freqency
         freqCh1 = 1/lspPer 
@@ -131,6 +133,7 @@ class KoolertronSig(object):
         
     
     # set the duty cycle
+    # takes in a value between 0.0 - 1.0
     def setDuty(self,duty,channel=1):
         if(duty <= 1):
             dutycycle = int(duty * 1000)
