@@ -24,7 +24,7 @@ class KoolertronState(object):
 # base class for the koolertron
 class KoolertronSig(object):
     
-    def __init__(self,ttydev):
+    def __init__(self,ttydev='/dev/ttyUSB0'):
         #self.ttydevice = '/dev/ttyUSB0'
         self.ttydevice = ttydev
         self.baudRate = 115200 # baud rate dosn't change 
@@ -201,7 +201,7 @@ class KoolertronSig(object):
     
     # helpers for making diffrent functions
     
-    def sinwave(self,freq,amp,phase=0,offset=0,chan=1):
+    def sinwave(self,freq,amp=1,phase=0,offset=0,chan=1):
         
         if self.isConnected(): # see if we're connected
             self.setAmplitude(amp,chan)
@@ -215,6 +215,32 @@ class KoolertronSig(object):
         
         return copy.copy(self.getState(chan))
 
+    def squareWave(self,freq,amp=1,phase=0,offset=0,chan=1):
+        if self.isConnected():
+            self.setAmplitude(amp,chan)
+            self.setFreq(freq,chan)
+            self.setWave('square',chan)
+            self.setOffSet(offset,chan)
+            if chan == 2:
+                self.setPhase(phase)
+        else:
+            return none
+        return copy.copy(self.getState(chan))
+
+    def pwm(self,freq,amp=1,phase=0,offset=0,chan=1,duty=0.5):
+        if self.isConnected():
+            self.setAmplitude(amp,chan)
+            self.setFreq(freq,chan)
+            self.setWave('CMOS',chan)
+            self.setOffSet(offset,chan)
+            self.setDuty(duty,chan)
+            if chan == 2:
+                self.setPhase(phase)
+        else:
+            return none
+        return copy.copy(self.getState(chan))
+        
+
 class KSchannel(KoolertronSig):
     pass
 
@@ -224,4 +250,7 @@ class Servo(KoolertronSig):
         self.channel = chan
         super().__init__(ttydev)
         
-    
+class Cli:
+
+    def __init__(self):
+        pass
