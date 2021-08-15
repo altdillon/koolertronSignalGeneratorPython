@@ -8,6 +8,17 @@ Created on Sat Oct 10 13:39:34 2020
 
 import serial
 import copy
+import numpy as np
+
+# basic helper functions for the arb waveform stuff
+def makeStr(arr):
+    sgStr=''
+    for elem in arr:
+        sgStr = sgStr + str(int(elem)) + ','
+    return sgStr[:-1]
+
+def vmap(x,in_min,in_max,out_min,out_max):
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 # stories 
 class KoolertronState(object):
@@ -91,6 +102,47 @@ class KoolertronSig(object):
             self.chan1State.waveType = wavecommands[wavetype]
         elif channel == 2:
             self.chan2State.waveType = wavecommands[wavetype]
+
+    # set an apartray wave form
+    # can take values between 1 and 60
+    def setArb(self,arb,chan=1):
+        # make sure that the arb between 1 and 60
+        if arb < 1 or arb > 60:
+            return None # at this point there's not point in running the function
+
+        # convert the id to a string and add leading zeros if needed
+        arbCmd = "{}".format(arb)
+        if arb < 10:
+            arbCmd = arbCmd.zfill(2)
+        cmd = "1{}.".format(arbCmd)
+        # set the channel
+        chanCmd = ""
+        if chan == 1:
+            chanCmd = ":w21={}.".format(cmd)
+        elif chan == 2:
+            chanCmd = ":w22={}.".format(cmd)
+        self.sendCommand(chanCmd)
+
+    # set a value for the DDS table in an arbitary wave form
+    # takes in a value with length 2048. Values will be normalized to -1 to 1
+    def setArbValues(self,nArray,arb=1):
+        # do some type checking to make sure that the stuff if formated correnctly
+        #if type(nArray) != '<class \'numpy.ndarray\'>':
+        #    return None
+        # if everything works out then normalize and get started
+        xnorm = nArray/nArray.max()
+        xnmap = vmap(xnorm,-1,1,0,4095) # map to a value as seen in the datasheet
+        xnmap_str = makeStr(xnmap)
+        # add leading zeros to the arb function id
+        arbId = ""
+        if arb < 10:
+            arbId = str(arb).zfill(2)
+        else:
+            arbId = str(arb)
+        # fianlly build up the command
+        
+        cmd = ':a{}={}.'.format(arbId,xnmap_str)
+        self.sendCommand(cmd)
     
     # set freq in Hz
     def setFreq(self,freq,channel=1):
@@ -240,6 +292,10 @@ class KoolertronSig(object):
             return none
         return copy.copy(self.getState(chan))
         
+class WaveForm:
+    def __init__(self,wav,freq=1e3,dcoffset=0,phase=0,filepath=None):
+        # do a dump oop thing and write the things to local values
+        pass # TODO: add code here
 
 class KSchannel(KoolertronSig):
     pass
