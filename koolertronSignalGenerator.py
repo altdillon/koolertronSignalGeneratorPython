@@ -123,6 +123,11 @@ class KoolertronSig(object):
             chanCmd = ":w22={}.".format(cmd)
         self.sendCommand(chanCmd)
 
+    # take in a list of values to generate a multitone signal
+    # https://stackoverflow.com/questions/29194588/python-gcd-for-list
+    def multiTone(self,tones,channel=1):
+        pass
+
     # set a value for the DDS table in an arbitary wave form
     # takes in a value with length 2048. Values will be normalized to -1 to 1
     def setArbValues(self,nArray,arb=1):
