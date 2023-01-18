@@ -10,6 +10,7 @@ import serial
 import copy
 import numpy as np
 
+
 # basic helper functions for the arb waveform stuff
 def makeStr(arr):
     sgStr=''
@@ -126,7 +127,20 @@ class KoolertronSig(object):
     # take in a list of values to generate a multitone signal
     # https://stackoverflow.com/questions/29194588/python-gcd-for-list
     def multiTone(self,tones,channel=1):
-        pass
+        # do a type check
+        # if it's not already a numpy array convert it to a numpy array
+        if type(tones) != np.ndarray:
+            tones = np.array(tones,dtype='float')
+        # take in a value and devide it by the gcd 
+        
+        
+        # add up the unit arb values 
+        n = 2048
+        t = np.linspace(start=-np.pi,stop=np.pi,num=n)
+        for elem in tones:
+            pass
+
+
 
     # set a value for the DDS table in an arbitary wave form
     # takes in a value with length 2048. Values will be normalized to -1 to 1
@@ -281,7 +295,7 @@ class KoolertronSig(object):
             if chan == 2:
                 self.setPhase(phase)
         else:
-            return none
+            return None
         return copy.copy(self.getState(chan))
 
     def pwm(self,freq,amp=1,phase=0,offset=0,chan=1,duty=0.5):
@@ -294,7 +308,7 @@ class KoolertronSig(object):
             if chan == 2:
                 self.setPhase(phase)
         else:
-            return none
+            return None
         return copy.copy(self.getState(chan))
         
 class WaveForm:
