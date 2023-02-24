@@ -179,8 +179,14 @@ class KoolertronSig(object):
     # set the phase in degrees.  ONly works for channel 2
     # phase is a value defined from 
     def setPhase(self,phase):
-        phaseValue = phase * 100 
-        cmd = ':w31={}.'.format(phaseValue)
+        phaseValue = 360 # zero phase
+        if phase <= 99:
+            phaseValue = phase * 100
+        elif phase > 100:
+            phaseValue = phase * 10
+
+        #cmd = ':w31={}.'.format(phaseValue)
+        cmd = f':w31={int(phaseValue)}.' 
         self.sendCommand(cmd)
         self.chan2State.phase = phase # only chan 2 has a phase relitive to phase 1
            
