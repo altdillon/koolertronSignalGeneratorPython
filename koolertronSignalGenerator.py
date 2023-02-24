@@ -218,7 +218,7 @@ class KoolertronSig(object):
             self.sendCommand(cmd)
 
     # set the offset voltage
-    def setOffSet(self,offset,channel):
+    def setOffSet(self,offset,channel=1):
         offsetcmd = None
         offsetvalue = int(offset*100)
         # set the values for the offset
